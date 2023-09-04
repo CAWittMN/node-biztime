@@ -31,12 +31,18 @@ router.get("/:code", async function (req, res, next) {
       `SELECT id FROM invoices WHERE comp_code=$1`,
       [code]
     );
+    const industriesResults = await db.query(
+      `SELECT industry FROM industries AS i INNER JOIN companies_industries AS ci ON (i.code = ci.ind_code) WHERE ci.comp_code=$1`,
+      [code]
+    );
     if (companyResults.rows.length === 0) {
       throw new ExpressError(`No such company: ${code}`, 404);
     }
     const company = companyResults.rows[0];
     const invoices = invoiceResults.rows;
+    const industries = industriesResults.rows;
     company.invoices = invoices.map((inv) => inv.id);
+    company.industries = industries.map((ind) => ind.industry);
     return res.json({ company: company });
   } catch (err) {
     return next(err);

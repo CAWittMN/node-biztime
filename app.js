@@ -3,6 +3,7 @@
 const express = require("express");
 const companiesRoutes = require("./routes/companies");
 const invoicesRoutes = require("./routes/invoices");
+const industriesRoutes = require("./routes/industries");
 const ExpressError = require("./expressError");
 
 const app = express();
